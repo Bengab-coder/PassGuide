@@ -1,0 +1,239 @@
+#:import NoTransition kivy.uix.screenmanager.NoTransition		
+Screen:
+	ScreenManager:
+		id:sm
+		transition:NoTransition()
+		Screen:
+			name:"enter_master_passwd"
+			MDToolbar:
+				title:"Enter Master Password"
+				pos_hint:{"top":1}
+			
+			MDIcon:
+				icon:"account"
+				font_size:"100dp"
+				halign:"center"
+				pos_hint:{'center_y':0.7}
+				theme_text_color:"Custom"
+				text_color:app.theme_cls.primary_color
+				
+			MDTextField:
+				id:passwd
+				password:True
+				hint_text:"Enter your master password"
+				size_hint_x:0.5
+				size_hint_y:0.1
+				pos_hint:{"center_x":0.5,'center_y':0.55}
+					
+			MDRectangleFlatButton:
+				text:"Continue"
+				pos_hint:{"center_x":0.5,"center_y":0.4}
+				on_release:app.authenticate(sm,passwd)
+			
+		Screen:
+			name:"set_master_passwd"
+			MDToolbar:
+				title:"Set Master Password"
+				pos_hint:{"top":1}
+
+			MDIcon:
+				icon:"account"
+				font_size:"100dp"
+				halign:"center"
+				pos_hint:{'center_y':0.7}
+				theme_text_color:"Custom"
+				text_color:app.theme_cls.primary_color
+				
+			MDTextField:
+				id:master_passwd
+				password:True
+				hint_text:"Set your master password"
+				size_hint_x:0.5
+				size_hint_y:0.1
+				pos_hint:{"center_x":0.5,'center_y':0.55}
+			MDLabel:
+				text:"Keep this password safe this app doesn't allow password recovery"
+				theme_text_color:"Error"
+				pos_hint:{"center_y":0.49}
+				halign:"center"
+						
+			MDRectangleFlatButton:
+				text:"Set password"
+				pos_hint:{"center_x":0.5,"center_y":0.4}
+				on_release:app.set_master_passwd(sm,master_passwd)
+
+		
+		Screen:
+			name:"my_passwds"
+			id:passwds_screen
+			BoxLayout:
+				orientation:"vertical"
+				MDToolbar:
+					title:"My Passwords"
+					
+				ScrollView:
+					MDList:
+						id:passwds
+						
+				MDFloatingActionButton:
+					icon:"plus"
+					pos_hint:{"center_x":0.85,"center_y":1}
+					md_bg_color:app.theme_cls.primary_color
+					on_release:
+						sm.current="add_passwd"			
+				Widget:
+					size_hint_y:0.1
+							
+		Screen:
+			name:"add_passwd"
+			MDToolbar:
+				title:"New Credential"
+				left_action_items:[["keyboard-backspace",lambda instance:app.go_back(),"Go to home page"]]
+				pos_hint:{"top":1}
+			
+			MDTextField:
+				id:user_name
+				hint_text:"User"
+				size_hint_x:0.8
+				size_hint_y:0.1
+				pos_hint:{"center_x":0.5,"center_y":0.83}
+				helper_text:"Eg. Bengab"
+				helper_text_mode:"on_focus"
+				
+			
+			MDTextField:
+				id:email
+				hint_text:"Email"
+				helper_text:"Eg. example@gmail.com"
+				helper_text_mode:"on_focus"
+				size_hint_x:0.8
+				size_hint_y:0.1
+				pos_hint:{"center_x":0.5,"center_y":0.70}
+				
+			MDTextField:
+				id:passwd_new
+				hint_text:"Password"
+				helper_text:"Eg. example37pwsd"
+				helper_text_mode:"on_focus"
+				size_hint_x:0.8
+				size_hint_y:0.1
+				pos_hint:{"center_x":0.5,"center_y":0.58}
+			
+			MDTextField:
+				id:account_name
+				hint_text:"Account Name"
+				helper_text:"Eg. Github"
+				helper_text_mode:"on_focus"
+				size_hint_x:0.8
+				size_hint_y:0.1
+				pos_hint:{"center_x":0.5,"center_y":0.46}
+				max_text_length:15
+				
+			MDRectangleFlatButton:
+				text:"Add"
+				size_hint:0.5,0.1
+				pos_hint:{"center_x":0.5,"center_y":0.30}
+				on_release:
+					app.add_passwd(sm,user_name,email,passwd_new,account_name)
+		Screen:
+			name:"view_credentials"
+			MDToolbar:
+				title:"Account Credentials"
+				pos_hint:{"top":1}
+				left_action_items:[["keyboard-backspace",lambda instance:app.go_back(),"Go to home page"]]
+				
+			MDList:
+				pos_hint:{"top":0.9}
+				
+				ThreeLineIconListItem:
+					id:acct
+					text:"Account"
+					theme_text_color:"Custom"
+					text_color:app.theme_cls.primary_color
+					font_style:"H6"
+					secondary_text:app.account_name_label
+					IconLeftWidget:
+						icon:"account"
+						theme_text_color:"Custom"
+						text_color:app.theme_cls.primary_color
+					
+				ThreeLineIconListItem:
+					id:usr
+					text:"User"
+					theme_text_color:"Custom"
+					text_color:app.theme_cls.primary_color
+					font_style:"H6"
+					secondary_text:app.user_name_label
+					IconLeftWidget:
+						icon:"account"
+						theme_text_color:"Custom"
+						text_color:app.theme_cls.primary_color
+					
+				
+				ThreeLineIconListItem:
+					text:"Email"
+					theme_text_color:"Custom"
+					text_color:app.theme_cls.primary_color
+					font_style:"H6"
+					secondary_text:app.email_label
+					IconLeftWidget:
+						icon:"email"
+						theme_text_color:"Custom"
+						text_color:app.theme_cls.primary_color
+					
+				
+				ThreeLineIconListItem:
+					text:"Password"
+					theme_text_color:"Custom"
+					text_color:app.theme_cls.primary_color
+					font_style:"H6"
+					secondary_text:app.password_label
+					IconLeftWidget:
+						icon:"key-variant"
+						theme_text_color:"Custom"
+						text_color:app.theme_cls.primary_color
+					
+				
+			MDFloatingActionButton:
+				icon:"delete"
+				pos_hint:{"center_x":0.85,"center_y":0.1}
+				md_bg_color:app.theme_cls.primary_color
+				on_release:
+					sm.current="verify_passwd"
+		Screen:
+			name:"verify_passwd"
+			MDToolbar:
+				title:"Verify Password"
+				pos_hint:{"top":1}
+				left_action_items:[["keyboard-backspace",lambda instance:app.go_back(),"Go to home page"]]
+				
+			MDIcon:
+				icon:"account"
+				font_size:"100dp"
+				halign:"center"
+				pos_hint:{'center_y':0.75}
+				theme_text_color:"Custom"
+				text_color:app.theme_cls.primary_color
+				
+			MDTextField:
+				id:passwd_v
+				password:True
+				size_hint_x:0.5
+				size_hint_y:0.1
+				hint_text:"Verify your master password"
+				pos_hint:{"center_x":0.5,'center_y':0.6}
+					
+			MDRectangleFlatButton:
+				text:"Continue"
+				pos_hint:{"center_x":0.7,"center_y":0.4}
+				on_release:app.delete_account(passwd_v,acct.secondary_text,usr.secondary_text)
+					
+				
+			MDRectangleFlatButton:
+				text:"Abort"
+				pos_hint:{"center_x":0.3,"center_y":0.4}
+				on_release:
+					passwd_v.text=""
+					app.go_back()
+			
+				
